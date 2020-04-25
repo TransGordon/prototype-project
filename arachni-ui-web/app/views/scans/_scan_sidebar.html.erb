@@ -1,0 +1,131 @@
+<ul class="nav nav-list">
+    <li class="nav-header">
+        Toggle visibility of
+    </li>
+
+    <li id="comments-link-container">
+        <a class="toggle-comments" data-toggle="collapse"
+           href="#comments">
+            <i class="icon-comments"></i>
+
+                    <span title="The scan has <%= pluralize @scan.comments.size, 'comment' %>."
+                          class="label hide total-comments-counter">
+                        <%= @scan.comments.size %>
+                    </span>
+
+                    <span title="The scan has new comments."
+                          class="hide label label-info new-comments-counter">
+                    </span>
+
+            Comments
+        </a>
+    </li>
+
+    <% if @scan.running? %>
+    <li id="toggle-statistics">
+        <a href="#statistics" data-toggle="collapse"
+           title="Toggle statistics visibility" role="button">
+            <i class="icon-list-alt"></i>
+
+            Statistics
+        </a>
+    </li>
+    <% end %>
+</ul>
+
+<% if @scan.root_revision.has_revisions? %>
+    <div id="revisions-nav-list">
+        <%= render 'revisions_nav_list' %>
+    </div>
+<% end %>
+
+<ul class="nav nav-list">
+    <li class="divider"></li>
+
+    <li class="nav-header">
+        Actions
+    </li>
+
+    <% if can?( :update, @scan ) %>
+        <li>
+            <a href="<%= edit_scan_path @scan %>"
+               title="Edit this scan's details"
+               role="button">
+                <i class="icon-edit"></i>
+                Full edit
+            </a>
+        </li>
+    <% end %>
+
+    <% if !@scan.suspended? && @scan.finished? && !@scan.overview? && @scan.report %>
+        <li id="download-report">
+            <i class="icon-download-alt"></i>
+            Download report as:
+
+            <%
+               reports_links = reports_with_outfile.map do |shortname, (name, desc)|
+                   link_to name, report_scan_path( format: shortname ),
+                           rel: 'tooltip', title:  desc, data: { 'no-turbolink' => true }
+               end
+            %>
+
+            <ul class="nav nav-list">
+                <p>
+                    HTML
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#downloadModal1">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+                <p>
+                    JSON
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#downloadModal2">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+                <p>
+                    Marshal
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#downloadModal3">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+                <p>
+                    XML
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#downloadModal4">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+                <p>
+                    YAML
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#downloadModal5">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+                <p>
+                    PDF
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#downloadModal6">
+                        Download
+                    </a>
+                    <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#emailModal">
+                        Email
+                    </a>
+                </p>
+            </ul>
+        </li>
+    <% end %>
+</ul>
+
